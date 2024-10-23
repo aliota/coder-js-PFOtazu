@@ -1,0 +1,27 @@
+@import "_colores";
+
+@mixin encabezado($family,$size)
+{
+    font-family: $family;
+    font-size: $size;
+}
+
+@for $i from 1 through 3 {  
+    $tamano: 1rem;  
+    @if $i == 1 {
+        $tamano: 2rem;  
+    } @else if $i == 2 {
+        $tamano: 1.3rem; 
+    } @else {
+        $tamano: 1.1rem; 
+    }
+    h#{$i}{
+        @include encabezado($fuentes,$tamano);
+        @if $i <3 {
+            color: $claro;
+        } @else {
+            padding: 10px !important; 
+        }
+    }   
+}
+

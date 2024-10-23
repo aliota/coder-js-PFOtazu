@@ -1,0 +1,368 @@
+@import "_reset";
+@import "_colores";
+@import "_fuentes";
+
+/*Encabezados*/
+@import "_encabezados";
+
+/*Cambio de Color Bootstrap*/
+@import "_colores-bootstrap";
+
+$colores-girando: (
+    1: $claro,
+    2: $sinbad,
+    3: antiquewhite,
+    4: #e7e764,
+    5: #660b66,
+    6: $eden,
+    7: $san-marino,
+    8: $bondi-blue,
+    9: $sinbad);
+
+@keyframes girando{
+    @each $clave, $valor in $colores-girando {  
+        #{$clave*10}%{transform: rotate(#{$clave*36}deg); color: $valor;}
+    }       
+}
+
+body{
+    background-color: $eden;
+    font-size: 16px;
+    a{
+        text-decoration: none;
+    }
+
+    /*header*/
+    @import "_header";
+
+    /*main*/
+    main {     
+        background-image:linear-gradient($san-marino,$eden);        
+    }
+
+    .clients-popover{
+        color: $eden !important;
+        padding: 5px 48px 10px 48px  !important;
+        background-color: #e9ecef;         
+    }  
+
+    /* footer*/
+    @import "_footer";
+}
+
+/*main Inicio*/
+.main-index {       
+    color: $claro;         
+    h1{
+        height: 7vh;
+        font-size: 7.1vw; 
+        .con{
+           color: $sinbad; 
+           transform: scale(0.95,0.95) rotate(-20deg) translate(1px,-1px);            
+        } 
+        .con:hover{
+           animation-name: girando;
+           animation-iteration-count: infinite;
+           animation-timing-function: ease-in;
+           animation-duration: 4s;
+           animation-delay: 0s;
+        }             
+    }       
+    h2{
+        font-size: 7vw;        
+    }
+    h3{
+        font-size: 3.5vw;
+    }
+    .main-index__section-1{
+        height: 300px;
+        .section-1__servicios{            
+            button{
+                border: 2px solid $eden !important;
+                h3{               
+                    a{
+                        color: $eden;           
+                    }
+                }                
+            }                       
+        }
+    }
+    .main-index__section-2{     
+        background-color: antiquewhite;
+        h3,p {             
+            color: $oscuro;                   
+        } 
+    }    
+
+    form {
+        color: $eden !important;
+        border: 2px solid $eden;
+        border-radius: 5px;  
+        .btn-primary {
+            border-color: $eden !important;   
+            background-color: $san-marino;                
+        }
+        .btn-primary:hover{
+            background-color: $bondi-blue !important;
+        }
+        .btn-primary:active{
+            background-color: $bondi-blue !important;
+        }     
+    }      
+}
+
+
+@media (min-width: 350px) {
+    .main-index{              
+        h2{
+            font-size: 7vw;        
+        }
+        h3{
+            font-size: 4vw;        
+        }
+        .main-index__section-1{
+            height: 350px;
+        }       
+    }
+}
+
+@media (min-width: 576px) {
+    .main-index{
+       
+        h1{           
+            font-size: 7vw;
+        }
+        h2{
+            font-size: 6vw;        
+        }
+        h3{
+            font-size: 4vw;        
+        }
+        .main-index__section-1{
+            height: 400px;
+        }
+    }
+}
+
+@media (min-width: 768px) {
+    .main-index{        
+        h1{           
+            font-size: 6.7vw;
+        }    
+        h2{
+            font-size: 5vw;        
+        }           
+    }
+}
+
+@media (min-width: 992px) {
+    .main-index{               
+        h1{           
+            font-size: 6vw;
+        }
+        h2{
+            font-size: 4vw;        
+        }
+        h3{
+            font-size: 3vw;        
+        }        
+    }
+}
+
+@media (min-width: 1200px) {
+    .main-index{       
+        h1{
+            font-size: 4.5vw;
+        }
+        h2{
+            font-size: 3vw;        
+        }
+        h3{
+            font-size: 1.5vw;        
+        }        
+    }
+}
+
+
+/*main Nosotros*/
+.main-about{
+    color: $claro;
+}
+
+/*main Servicios*/
+.main-services {       
+    .main-services__free{        
+        color: $eden; 
+        background-color: $sinbad;
+        .free__article{
+            height: 100%;            
+        }
+        .free__image{
+            background-color: $claro;
+            height: 100%;            
+        }
+    }
+    .main-services__premium{       
+        color: $claro;         
+        .premium__article{
+            height: 100%;           
+        }
+        .premium__image{
+            height: 100%;              
+        }
+    }
+}
+
+
+/*main webs*/
+.main-web {     
+    form {
+        color: $eden !important;
+        border: 2px solid $eden;
+        border-radius: 5px;  
+        .btn-primary {
+            border-color: $eden !important;   
+            background-color: $san-marino;                
+        }
+        .btn-primary:hover{
+            background-color: $bondi-blue !important;
+        }
+        .btn-primary:active{
+            background-color: $bondi-blue !important;
+        }           
+    }
+    .info-contacto{
+        color: $eden !important;
+        font-size: 0.8rem; 
+    }    
+}
+
+
+
+/*main Contacto*/
+.main-contacto {     
+    form {
+        color: $eden !important;
+        border: 2px solid $eden;
+        border-radius: 5px;  
+        .btn-primary {
+            border-color: $eden !important;   
+            background-color: $san-marino;                
+        }
+        .btn-primary:hover{
+            background-color: $bondi-blue !important;
+        }
+        .btn-primary:active{
+            background-color: $bondi-blue !important;
+        }           
+    }
+    .info-contacto{
+        color: $eden !important;
+        font-size: 0.8rem; 
+    }    
+}
+
+/*main Gestión de Usuarios*/
+.main-user{
+    form {
+        color: $eden !important;
+        border: 2px solid $eden;
+        border-radius: 5px;  
+        .btn-primary {
+            border-color: $eden !important;   
+            background-color: $san-marino;                
+        }
+        .btn-primary:hover{
+            background-color: $bondi-blue !important;
+        }
+        .btn-primary:active{
+            background-color: $bondi-blue !important;
+        }
+        .btn-secondary {
+            color: #{$eden}aa;
+            border-color: #{$eden}aa !important;   
+            background-color: $sinbad;                
+        }
+        .btn-secondary:hover{
+            color: $claro;
+            background-color: $bondi-blue !important;
+        }
+        .btn-secondary:active{
+            color: $claro;
+            background-color: $bondi-blue !important;
+        }      
+    }
+}
+
+/*main premium*/
+#mostrarCarrito {
+    color: eden !important;
+    border: 2px solid eden;
+    border-radius: 5px;
+  }
+
+
+/*SiteMap*/
+.body-sitemap{
+    height: 100vh; 
+    .main-sitemap__section{
+        h1{
+            padding-bottom: 10px !important;
+        }
+        h2{
+            color: $eden;
+            padding-top: 5px !important;
+        }
+        h3{
+            color: $san-marino;
+        }
+        ul p{
+            color: $san-marino !important; 
+            padding: 5px !important;
+        }        
+        background-image:linear-gradient($san-marino,$eden) !important;        
+    }    
+    .main-sitemap__fixed{
+        height: 90px;       
+        background-color: $eden;
+    }  
+}
+
+/*Error 404*/
+.body-error-404{
+    background-image:url('../assets/images/error.svg');
+    background-size: cover;   
+}
+
+#main-error-404{
+    height: 100vh;
+    background-image:none; 
+    color: $sinbad !important;     
+    h1{
+        .h1__error{
+            font-size: 1.5vw;                 
+        }
+        .h1__404{
+            font-size: 10vw;
+        }
+    }
+    h2{
+        font-size: 3vw;        
+    }
+    .logo{
+        height: 25vh;
+    }
+    .credit{
+        color: $eden;       
+    }
+    p {
+        font-size: 2vw;  
+        a{
+            color:$claro;
+        }
+    };
+}
+
+
+
+

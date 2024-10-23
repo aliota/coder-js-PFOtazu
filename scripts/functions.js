@@ -1,3 +1,5 @@
+
+
 //agrega a 'itemsDisponibles' nuevos items creados a partir de 'items' y 'precios'
 function agregarItemsDisponibles(itemsDisponibles,items,precios){
     if(items.length==precios.length){
@@ -56,13 +58,15 @@ function cantidadDePaginas(){
     return resultado;                 
 }
 
+
+
 //guarda en local storage el sitio y cantidad ingresado en el formulario de servicios premium
-function sitioYCantidad(){
+function sitioYCantidad(){    
     const resultado = { sitio:codigoSitio(),cantidad:cantidadDePaginas()}; 
     let mensaje = `El sitio no está disponible en este momento`;
     if (articuloValido(itemsDisponibles,resultado.sitio)){
         let nombreSitio = darNombreArticulo(itemsDisponibles,resultado.sitio); 
-        mensaje = `Se agregó al carrito ${resultado.cantidad} páginas de un sitio ${nombreSitio}`;          
+        mensaje = `Se agregó al carrito ${resultado.cantidad} páginas de un sitio ${nombreSitio}`;               
         let carrito = JSON.parse(localStorage.getItem('carrito'));        
         if (carrito){            
             let sitioExistente = carrito.find((elem)=>elem.sitio === resultado.sitio); 
@@ -78,7 +82,15 @@ function sitioYCantidad(){
         }            
         localStorage.setItem('carrito',JSON.stringify(carrito));       
     }        
-    alert(mensaje);          
+    Swal.fire({
+        text: mensaje,         
+        confirmButtonText: "Aceptar",
+        confirmButtonColor: "#114c5f",         
+        width: 800,        
+        padding: "6em",
+        color: "#0799b6",
+        background: "9cd2d3",        
+      });  
 }
 
 

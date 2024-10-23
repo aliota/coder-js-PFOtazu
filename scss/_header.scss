@@ -1,0 +1,80 @@
+@import "_colores";
+
+header {
+    height: 90px;
+    background-color: $san-marino;   
+
+    .logo {
+        .logo__img{
+            transition: all 1s;
+        }
+        .logo__img:hover{
+            transform: scale(1.2,1.2) translate(5px,5px);
+        }
+    }
+
+    .logo-crea{
+        .logo-crea__img{
+            transition: all 1s;
+        }
+        .logo-crea__img:hover {
+            transform: scale(1.2,1.2) translate(-5px,5px) skewX(-10deg);
+        }
+    }
+      
+    .usuario{
+        .usuario__img{
+            transition: all 1s;
+        }
+        .usuario__img:hover {
+            transform: scale(1.4,1.4) translateY(5px);
+        }
+    } 
+      
+    #nav__actual{  
+        transform: scale(1.2,1.2);
+        background-color: #{$eden}6a !important;
+    }
+    #nav__actual:hover {
+        background-color: $bondi-blue !important;
+    }
+    .btn-outline-primary {
+        border-color: $claro !important;       
+    }
+    .btn-outline-primary:hover{
+        background-color: $bondi-blue !important;
+    }
+    .btn-outline-primary:active{
+        background-color: $bondi-blue !important;
+    }
+    
+    .nav--principal{
+        .nav-item {        
+            .nav-link{
+                color: $claro !important; 
+            }
+            .nav-link:hover{       
+                background-color: $bondi-blue !important; 
+            }     
+        }
+    }
+         
+    .dropdown-menu{
+        .nav-item{
+            background-color: $sinbad !important;
+            .nav-link {
+                color: $eden !important; 
+                padding: 10px 0px 10px 0px !important;    
+            }
+            .nav-link:hover {
+                background-color: $claro !important;     
+            }
+        }        
+    }
+}
+
+
+
+#header-error-404{
+    background-color: #{$san-marino}00;       
+}

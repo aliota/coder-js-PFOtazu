@@ -8,7 +8,8 @@
     <title>Crea tu web con +45.uy | Fácil y Rápido | Free o Premium</title>
     <link rel="shortcut icon" href="./assets/icons/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="./css/bootstrap.min.css">
-    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/style.css">       
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"> 
     
 </head>
 <body>
@@ -87,9 +88,10 @@
                         <input type="number" class="form-control p-2" id="cantidad" placeholder="ej: 5" aria-label="cantidad de páginas">
                     </div>                
                     
-                    <button type="submit" class="btn btn-primary p-1 my-1">Agregar al carrito</button>
+                    <button type="button" class="btn btn-primary p-1 my-1" id="aplicar">Agregar al carrito</button>
                     <button type="reset" class="btn btn-primary p-1 my-1 mx-3">Cancelar</button>
-                    <button type="button" class="btn btn-primary p-1 my-1" id="irCarrito">Ir al carrito</button>                                                        
+                    <button type="button" class="btn btn-primary p-1 my-1" id="irCarrito">Ir al carrito</button>  
+                    <button type="submit" class="btn btn-primary p-1 my-1" id="enviar">enviar</button>                                                      
                 </form>
             </div>              
         </section>        
@@ -119,10 +121,11 @@
             </div>                                  
         </div>
     </footer>
-
+    <script src="./scripts/sweetalert2.all.min.js"></script>       
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="./scripts/bootstrap.bundle.min.js"></script> 
     <script src="./scripts/classes.js"></script>
     <script src="./scripts/functions.js"></script>
-    <script src="./scripts/carrito.js"></script> 
+    <script src="./scripts/carrito.js"></script>      
 </body>
 </html> 

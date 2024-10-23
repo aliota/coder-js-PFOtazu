@@ -1,0 +1,20 @@
+@import "_colores";
+
+$mapa-colores-bs: (
+    primary: $eden,
+    secondary: $san-marino,
+    danger-subtle: $bondi-blue,
+    warning-subtle: $sinbad,
+    light: $claro,
+    dark:$oscuro);
+
+/*Clases de Colores*/
+@each $nombre-color, $color in $mapa-colores-bs {
+    .text-#{$nombre-color} {
+        color:$color !important;
+    }
+    .bg-#{$nombre-color} {
+        background-color:$color !important;
+    }
+}
+

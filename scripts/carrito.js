@@ -20,9 +20,19 @@ console.log(descuentosDisponibles);
 const miCarrito = new Carrito(itemsDisponibles,descuentosDisponibles);
 console.log(miCarrito);
 
-let formulario = document.getElementById("formPremium");
-let agregarSitio = formulario.addEventListener("submit",sitioYCantidad);  
-let irCarrito = document.getElementById("irCarrito");
-let resumen = irCarrito.addEventListener("click",resumenCarrito); 
+document.getElementById("aplicar").addEventListener("click",sitioYCantidad);
+document.getElementById("irCarrito").addEventListener("click",resumenCarrito); 
+
+document.getElementById("enviar").addEventListener("click", function(event){
+    event.preventDefault();
+    Swal.fire({
+        title: "mensaje",
+        text: "",
+        icon: "info",
+        confirmButtonText: "Aceptar",
+        confirmButtonColor: "#FF3333",
+        footer: '<a href="https://www.google.com.uy/search?q=coder">Querés saber más de Coder?</a>'
+      });     
+  });
 
 

@@ -410,11 +410,10 @@ body footer a:over {
   background-color: #0799b6 !important;
 }
 
-
 /*main premium*/
 #mostrarCarrito {
-  color: #114c5f !important;
-  border: 2px solid #114c5f;
+  color: eden !important;
+  border: 2px solid eden;
   border-radius: 5px;
 }
 
