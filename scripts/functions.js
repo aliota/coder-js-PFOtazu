@@ -12,17 +12,19 @@ const buscarProductosAPI = async (texto) => {
 async function buscarCotizacionesAPI() {
     let salida = {};
     const url = "";//"https://uruguayapi.onrender.com/api/v1/banks/brou_rates";
-    await fetch(url)
+    salida = await fetch(url)
     .then(respuesta => respuesta.json())
     .then(datos => {
         console.log("datos de uruguayapi: "+datos);
         salida = datos;
+        return salida; 
     })
     .catch (()=>{ 
-        const buscoJson = async () => { salida = await buscarCotizacionesJsonAPI(); console.log("busco en json: "+salida.dolar.bid)};
-       buscoJson();        
+        const buscoJson = async () => { salida = await buscarCotizacionesJsonAPI(); console.log("busco en json desde el catch: "+salida.dolar.bid);return salida};
+        
+        return buscoJson();      
     })  
-    console.log("busco en json porque no espero: "+(salida?.dolar?.bid || -1));
+    console.log("busco en json porque no espero: "+salida+" "+(salida?.dolar?.bid || -1));
     return salida;      
 }
 
