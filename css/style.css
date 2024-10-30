@@ -354,6 +354,12 @@ body footer a:over {
 .main-web form .btn-primary:active {
   background-color: #0799b6 !important;
 }
+.main-web form h3 {
+  padding: 5px !important;
+}
+.main-web form .border-primary {
+  border-color: #114c5f !important;
+}
 .main-web .info-contacto {
   color: #114c5f !important;
   font-size: 0.8rem;

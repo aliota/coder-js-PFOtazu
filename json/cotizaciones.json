@@ -1,0 +1,62 @@
+{
+    "dolar": {
+        "bid": "40,20000",
+        "ask": "42,70000",
+        "spread_bid": "1,00000",
+        "spread_ask": "1,00000"
+    },
+    "dolar_ebrou": {
+        "bid": "40,60000",
+        "ask": "42,30000",
+        "spread_bid": "1,00000",
+        "spread_ask": "1,00000"
+    },
+    "euro": {
+        "bid": "42,37000",
+        "ask": "47,44000",
+        "spread_bid": "1,05410",
+        "spread_ask": "1,11090"
+    },
+    "peso_argentino": {
+        "bid": "0,02400",
+        "ask": "0,20000",
+        "spread_bid": "1.779,16670",
+        "spread_ask": "201,00000"
+    },
+    "real": {
+        "bid": "7,00000",
+        "ask": "8,70000",
+        "spread_bid": "6,10000",
+        "spread_ask": "4,62070"
+    },
+    "libra_esterlina": {
+        "bid": "50,89000",
+        "ask": "57,49000",
+        "spread_bid": "1,26600",
+        "spread_ask": "1,34630"
+    },
+    "franco_suizo": {
+        "bid": "45,57000",
+        "ask": "50,17000",
+        "spread_bid": "0,88220",
+        "spread_ask": "0,85120"
+    },
+    "guarani": {
+        "bid": "0,00495",
+        "ask": "0,00548",
+        "spread_bid": "8.127,92000",
+        "spread_ask": "7.796,32000"
+    },
+    "unidad_indexada": {
+        "bid": "-",
+        "ask": "6,12440",
+        "spread_bid": "-",
+        "spread_ask": "-"
+    },
+    "onza_troy_de_oro": {
+        "bid": "109.233,85200",
+        "ask": "117.209,79200",
+        "spread_bid": "2.717,26000",
+        "spread_ask": "2.744,96000"
+    }
+}

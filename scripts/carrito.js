@@ -1,12 +1,23 @@
 // Constantes
 const IVA = 0.22;
 
-// Inicializar Items Disponibles
-const ITEMS = ["Sitio Institucional o Empresarial","Portafolio","Micrositio","Blog","Plataforma Educativa","eCommerce","Portal","Sitio de Noticias","Foro","Red Social"];     
-const PRECIOS = [1000.00, 500.00, 600.00, 400.00, 700.00, 2000.00, 3000.00, 1500.00, 300.00, 2500.00];
-const itemsDisponibles = [];
-agregarItemsDisponibles(itemsDisponibles,ITEMS,PRECIOS);
-console.log(itemsDisponibles);
+
+
+
+//////a quitar ////////////////////////////////////
+buscarProductosAPI("linterna");
+
+let cotizacionDolar = {};
+let bid = 0;
+let ask = 0;
+const cotizacion =  async () => { 
+    cotizacionDolar = await buscarCotizacionesAPI();  
+    bid = (cotizacionDolar?.dolar?.bid ?? -1);
+    ask = (cotizacionDolar?.dolar?.ask ?? -1);
+    alert("cotización del dolar\ncompra:  "+ bid+"\nventa: "+ask)
+}
+cotizacion();
+//////////////////////////////////////////////////////////////////////////////////////////
 
 // Inicializar descuentos
 const dto0 = new Descuento("",0);
@@ -15,24 +26,21 @@ const dto10 = new Descuento("def10",0.10);
 const descuentosDisponibles = [dto0,dto5,dto10];
 console.log(descuentosDisponibles);
 
+// Inicializar items Disponibles y cargar Carrito
 
-// Carrito
-const miCarrito = new Carrito(itemsDisponibles,descuentosDisponibles);
-console.log(miCarrito);
+let crearCarrito  = async (items,descuentosDisponibles)=>{ 
+    let itemsDisponibles = await buscarItemsDisponibles(items);
+    // Carrito
+    const miCarrito = new Carrito(itemsDisponibles,descuentosDisponibles);
+    console.log(miCarrito);
+    renderCarrito(miCarrito);
+    document.getElementById("aplicar").addEventListener("click",sitioYCantidad); 
+    return miCarrito;    
+}
+let itemsDisponibles = [];
+crearCarrito(itemsDisponibles,descuentosDisponibles);
 
-document.getElementById("aplicar").addEventListener("click",sitioYCantidad);
-document.getElementById("irCarrito").addEventListener("click",resumenCarrito); 
 
-document.getElementById("enviar").addEventListener("click", function(event){
-    event.preventDefault();
-    Swal.fire({
-        title: "mensaje",
-        text: "",
-        icon: "info",
-        confirmButtonText: "Aceptar",
-        confirmButtonColor: "#FF3333",
-        footer: '<a href="https://www.google.com.uy/search?q=coder">Querés saber más de Coder?</a>'
-      });     
-  });
+
 
 

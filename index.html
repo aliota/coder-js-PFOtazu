@@ -63,38 +63,64 @@
         <div class="row">
             <h2 class="py-3 text-center">... y agrégalo al carrito</h2>
         </div> 
-       
-        <section class="row justify-content-center align-items-center bg-warning-subtle rounded">            
-            <div class="p-xl-2 p-1 col-12 ">
-                <form action="" method="post" class="form p-2 p-xl-3" id="formPremium">
-                    <div class="mb-3">                        
-                        <label for="sitio" class="form-label m-2"><strong>Selecciona el tipo de sitio web:</strong></label>                    
-                        <select name="lenguajes" id="sitio" class="form-control p-2" aria-label="Webs">
-                            <option value=1>Institucionales o de negocio</option>
-                            <option value=2>Personales o portafolios</option>
-                            <option value=3>Micrositios</option>
-                            <option value=4>Blogs</option>
-                            <option value=5>Educativos</option>
-                            <option value=6>Comercio electrónico</option>    
-                            <option value=7>Portales</option>
-                            <option value=8>Noticias o revista</option>            
-                            <option value=9>Wiki o foros de comunidades</option>               
-                            <option value=10>Redes sociales</option>                                
-                        </select>                     
-                    </div>
+       <div class="row justify-content-center align-items-center">
+        <section class="p-xl-2 p-1 col-4 bg-warning-subtle rounded">            
+          
+            <form action="" method="post" class="form p-2 p-xl-3" id="formPremium">
+                <div class="mb-3">    
+                    <h3 class="border-bottom border-2 border-primary mb-3">Agrega tu servicio</h3>                    
+                    <label for="sitio" class="form-label m-2">Selecciona el tipo de sitio web:</label>                    
+                    <select name="lenguajes" id="sitio" class="form-control p-2" aria-label="Webs">
+                        <option value=1>Institucional/Empresarial</option>
+                        <option value=2>Personal/Portafolio</option>
+                        <option value=3>Micrositio</option>
+                        <option value=4>Blog</option>
+                        <option value=5>Plataforma Educativa</option>
+                        <option value=6>Comercio electrónico</option>    
+                        <option value=7>Portal</option>
+                        <option value=8>Noticias/Revista</option>            
+                        <option value=9>Wiki/Foro</option>               
+                        <option value=10>Red social</option>                                                   
+                    </select>                     
+                </div>
 
-                    <div class="mb-3">                            
-                        <label for="cantidad" class="form-label m-2"><strong>Ingresa la cantidad de páginas web que contendrá el sitio</strong></label>
-                        <input type="number" class="form-control p-2" id="cantidad" placeholder="ej: 5" aria-label="cantidad de páginas">
-                    </div>                
-                    
-                    <button type="button" class="btn btn-primary p-1 my-1" id="aplicar">Agregar al carrito</button>
-                    <button type="reset" class="btn btn-primary p-1 my-1 mx-3">Cancelar</button>
-                    <button type="button" class="btn btn-primary p-1 my-1" id="irCarrito">Ir al carrito</button>  
-                    <button type="submit" class="btn btn-primary p-1 my-1" id="enviar">enviar</button>                                                      
-                </form>
-            </div>              
-        </section>        
+                <div class="mb-3">                            
+                    <label for="cantidad" class="form-label m-2">Ingresa la cantidad de páginas web que contendrá el sitio</label>
+                    <input type="number" class="form-control p-2" id="cantidad" placeholder="1" aria-label="cantidad de páginas">
+                </div>                
+                
+                <button type="button" class="btn btn-primary p-1 my-1" id="aplicar">Agregar al carrito</button>
+                <button type="reset" class="btn btn-primary p-1 my-1 mx-3">Cancelar</button>                                                                                  
+            </form>
+                         
+        </section> 
+        <section class="p-xl-2 p-1 col-7 ms-5 bg-warning-subtle rounded">            
+           
+            <form action="" method="post" class="form p-2 p-xl-3" id="mostrarCarrito">
+                <h3 class="border-bottom border-2 border-primary">Resumen del carrito</h3>                    
+                
+                <section class="row justify-content-center align-items-center bg-warning-subtle rounded my-2 px-2">
+                    <div class="p-xl-3 p-1 col-12 m-2" id="mostrarCarrito">
+                        <div id="sitiosCarrito">
+
+                        </div>                      
+                        
+                        <p class="mt-4"><strong>  Subtotal Carrito $ <span id="subtotalCarrito">0</span> + IVA  </strong></p>   
+                        <p><strong> IVA <span id="porcentajeIVA">22</span>%  $ <span id="iva">0</span></strong></p>  
+                        <p><strong>Subtotal IVA incluido $ <span id="subtotalIVA">0</span></strong></p>      
+                    </div> 
+                </section>
+
+                <div>
+                    <button type="button" class="btn btn-primary p-1 my-1" id="pagar">Pagar</button>
+                    <button type="button" class="btn btn-primary p-1 my-1 ms-3" id="vaciar">Vaciar carrito</button>  
+                </div>             
+                
+                                                                                      
+            </form>
+                        
+        </section>  
+       </div>              
     </main>
 
     <footer class="container-fluid d-flex align-items-center justify-content-center">       

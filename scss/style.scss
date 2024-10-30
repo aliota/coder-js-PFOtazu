@@ -21,7 +21,7 @@ $colores-girando: (
 
 @keyframes girando{
     @each $clave, $valor in $colores-girando {  
-        #{$clave*10}%{transform: rotate(#{$clave*36}deg); color: $valor;}
+        #{$clave*10}%{transform: rotate(#{$clave*36}deg); color: $valor}
     }       
 }
 
@@ -229,7 +229,13 @@ body{
         }
         .btn-primary:active{
             background-color: $bondi-blue !important;
-        }           
+        }  
+        h3 {
+            padding: 5px !important;
+        }
+        .border-primary {
+            border-color: $eden !important;
+        }        
     }
     .info-contacto{
         color: $eden !important;
@@ -298,7 +304,7 @@ body{
 #mostrarCarrito {
     color: eden !important;
     border: 2px solid eden;
-    border-radius: 5px;
+    border-radius: 5px;   
   }
 
 

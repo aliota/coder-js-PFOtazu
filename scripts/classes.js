@@ -167,3 +167,28 @@ class Carrito{
 
 
 }
+
+class Cotizacion{
+    constructor(bid, ask, spread_bid, spread_ask){
+        this.bid = bid;
+        this.ask = ask;
+        this.spread_bid = spread_bid;
+        this.spread_ask = spread_ask;        
+    }  
+}
+
+
+class Cotizaciones{
+    constructor(dolar, dolar_ebrou, euro, peso_argentino, real, libra_esterlina, franco_suizo, guarani, unidad_indexada, onza_troy_de_oro ){
+        this.dolar = dolar;
+        this.dolar_ebrou = dolar_ebrou;  
+        this.euro = euro;
+        this.peso_argentino = peso_argentino;
+        this.real = real;
+        this.libra_esterlina = libra_esterlina;
+        this.franco_suizo = franco_suizo;
+        this.guarani = guarani;
+        this.unidad_indexada = unidad_indexada;
+        this.onza_troy_de_oro = onza_troy_de_oro;              
+    }    
+}
