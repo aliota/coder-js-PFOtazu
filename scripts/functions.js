@@ -12,18 +12,13 @@ function agregarItemsDisponibles(itemsDisponibles,items,precios){
     }
 }
 
-//agrega a 'itemsDisponibles' nuevos items creados a partir del archivo sitios.json o carga items por defecto en caso de no acceder al archivo
-const buscarItemsDisponibles = async (itemsDisponibles) => {      
-    // Inicializar Items Disponibles por defecto
-    const ITEMS = ["Sitio_Institucional/Empresarial","Sitio_Personal/Portafolio","Micrositio","Blog","Plataforma Educativa","Comercio electrónico","Portal","Noticias/Revista","Wiki/Foro","Red Social"];     
-    const PRECIOS = [1000.00, 500.00, 600.00, 400.00, 700.00, 2000.00, 3000.00, 1500.00, 300.00, 2500.00];
-    
+//devuelve los items disponibles cargados desde archivo sitios.json o cero en caso de no acceder al archivo
+const actualizarItemsDisponibles = async () => {         
     const url = "./json/sitios.json";         
     const items = await fetch(url)
     .then(respuesta => respuesta.json())   
-    .then(datos => {return datos})
-    .catch(()=>{agregarItemsDisponibles(itemsDisponibles,ITEMS,PRECIOS); return itemsDisponibles}); 
-    itemsDisponibles = [...itemsDisponibles,...items];
+    .then(datos => {return datos}) 
+    .catch(()=>{return 0});          
     return items;       
 }
 
@@ -70,24 +65,26 @@ function cantidadDePaginas(){
 
 
 //guarda en local storage el sitio y cantidad ingresado en el formulario de servicios premium
-function sitioYCantidad(){    
-    const resultado = { sitio:codigoSitio(),cantidad:cantidadDePaginas()}; 
+function sitioYCantidad(miCarrito){    
+    const pedido= { sitio:codigoSitio(),cantidad:cantidadDePaginas()}; 
+    console.log(`sitio: ${pedido.sitio} cantidad: ${pedido.cantidad}`);
     let mensaje = `El sitio no está disponible en este momento`;
-    if (articuloValido(itemsDisponibles,resultado.sitio)){
-        let nombreSitio = darNombreArticulo(itemsDisponibles,resultado.sitio); 
-        mensaje = `Se agregó al carrito ${resultado.cantidad} páginas de un sitio ${nombreSitio}`;               
-        let carrito = JSON.parse(localStorage.getItem('carrito'));        
+    let carrito = [];
+    if (articuloValido(miCarrito.itemsDisponibles,pedido.sitio)){
+        let nombreSitio = darNombreArticulo(miCarrito.itemsDisponibles,pedido.sitio); 
+        mensaje = `Se agregó al carrito ${pedido.cantidad} páginas de un sitio ${nombreSitio}`;               
+        carrito = JSON.parse(localStorage.getItem('carrito'));        
         if (carrito){            
-            let sitioExistente = carrito.find((elem)=>elem.sitio === resultado.sitio); 
+            let sitioExistente = carrito.find((elem)=>elem.sitio === pedido.sitio); 
             if (sitioExistente!=undefined){
-                sitioExistente.cantidad += resultado.cantidad;
+                sitioExistente.cantidad += pedido.cantidad;
             }else{
-                carrito.push(resultado);
+                carrito.push(pedido);
             }
         }
-        else{
-            carrito = [];
-            carrito.push(resultado);
+        else{ 
+            carrito = [];         
+            carrito.push(pedido);
         }            
         localStorage.setItem('carrito',JSON.stringify(carrito));       
     }        
@@ -100,7 +97,9 @@ function sitioYCantidad(){
         color: "#0799b6",
         background: "9cd2d3",        
       });  
-    actualizoCarrito();  
+    compra = new Carrito(miCarrito.itemsDisponibles,miCarrito.descuentosDisponibles);
+    carrito.forEach(elem =>{compra.agregarArticulo(elem.sitio,elem.cantidad)});    
+    renderCarrito(compra);  
 }
 
 function agregarArticulo(miCarrito, numeroArticulo, cantidad){
@@ -212,15 +211,23 @@ const cotizacion =  async () => {
 
 
 
-// Inicializar items Disponibles y cargar Carrito
-let crearCarrito  = async (items,descuentosDisponibles)=>{ 
-    let itemsDisponibles = await buscarItemsDisponibles(items);
-    // Carrito
-    const miCarrito = new Carrito(itemsDisponibles,descuentosDisponibles);
-    console.log(miCarrito);
-    renderCarrito(miCarrito);
+// Cargar Carrito desde local storage
+let crearCarrito  = async (itemsPorDefecto,descuentosDisponibles)=>{ 
+    let itemsDisponibles = await actualizarItemsDisponibles();    
+    itemsDisponibles=itemsDisponibles||itemsPorDefecto;
     
+    // Carrito
+    const miCarrito = new Carrito(itemsDisponibles,descuentosDisponibles);    
+    renderCarrito(miCarrito);    
     return miCarrito;    
+}
+
+// Actualizar carrito 
+let actualizarCarrito  = async (itemsDisponibles,descuentosDisponibles)=>{ 
+    let miCarrito = await crearCarrito(itemsDisponibles,descuentosDisponibles);     
+    document.getElementById("aplicar").addEventListener("click", function() {           
+        sitioYCantidad(miCarrito);
+    });         
 }
 
 async function buscarCotizacionesAPI() {
