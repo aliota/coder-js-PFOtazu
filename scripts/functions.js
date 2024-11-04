@@ -22,6 +22,15 @@ const actualizarItemsDisponibles = async () => {
     return items;       
 }
 
+//devuelve los descuentos disponibles cargados desde archivo descuentos.json o cero en caso de no acceder al archivo
+const actualizarDescuentosDisponibles = async () => {         
+    const url = "./json/descuentos.json";         
+    const descuentos = await fetch(url)
+    .then(respuesta => respuesta.json())   
+    .then(datos => {return datos}) 
+    .catch(()=>{return 0});          
+    return descuentos;       
+}
 
 // verifica si numeroArticulo es un artículo válido de itemsDisponibles
 function articuloValido(itemsDisponibles,numeroArticulo){  
@@ -65,14 +74,13 @@ function cantidadDePaginas(){
 
 
 //guarda en local storage el sitio y cantidad ingresado en el formulario de servicios premium
-function sitioYCantidad(miCarrito){    
-    const pedido= { sitio:codigoSitio(),cantidad:cantidadDePaginas()}; 
-    console.log(`sitio: ${pedido.sitio} cantidad: ${pedido.cantidad}`);
+function sitioYCantidad(miPedido){    
+    const pedido= { sitio:codigoSitio(),cantidad:cantidadDePaginas()};     
     let mensaje = `El sitio no está disponible en este momento`;
     let carrito = [];
-    if (articuloValido(miCarrito.itemsDisponibles,pedido.sitio)){
-        let nombreSitio = darNombreArticulo(miCarrito.itemsDisponibles,pedido.sitio); 
-        mensaje = `Se agregó al carrito ${pedido.cantidad} páginas de un sitio ${nombreSitio}`;               
+    if (articuloValido(miPedido.itemsDisponibles,pedido.sitio)){
+        let nombreSitio = darNombreArticulo(miPedido.itemsDisponibles,pedido.sitio); 
+        mensaje = `Se agregó al carrito ${pedido.cantidad} ${pedido.cantidad==1?"página":"páginas"} de un sitio tipo ${nombreSitio}`;               
         carrito = JSON.parse(localStorage.getItem('carrito'));        
         if (carrito){            
             let sitioExistente = carrito.find((elem)=>elem.sitio === pedido.sitio); 
@@ -92,88 +100,77 @@ function sitioYCantidad(miCarrito){
         text: mensaje,         
         confirmButtonText: "Aceptar",
         confirmButtonColor: "#114c5f",         
-        width: 800,        
-        padding: "6em",
+        width: 400,        
         color: "#0799b6",
         background: "9cd2d3",        
       });  
-    compra = new Carrito(miCarrito.itemsDisponibles,miCarrito.descuentosDisponibles);
+    compra = new Pedido(miPedido.itemsDisponibles,miPedido.descuentosDisponibles);
     carrito.forEach(elem =>{compra.agregarArticulo(elem.sitio,elem.cantidad)});    
-    renderCarrito(compra);  
+    renderCarrito(compra,0);  
 }
 
-function agregarArticulo(miCarrito, numeroArticulo, cantidad){
-    if(articuloValido(miCarrito.itemsDisponibles,numeroArticulo)){
-        const articulo = miCarrito.itemsPedidos.find((elem) => elem.numeroArticulo === numeroArticulo);
-        if( articulo == undefined){
-            miCarrito.itemsPedidos.push({ numeroArticulo: numeroArticulo, cantidad: cantidad });                        
-        }else{
-            articulo.cantidad += cantidad;                
-        }                                           
-    }else{
-        alert("Artículo no disponible");
-    }                       
-}
-
-function cargoCarrito(miCarrito,itemsDisponibles){
-    let carrito = JSON.parse(localStorage.getItem('carrito'));        
+function cargoCarrito(miPedido){
+    let carrito = JSON.parse(localStorage.getItem('carrito')); 
     let salida = "";
+    // const ipAPI = "//api.ipify.org?format=json";
+    // const response = await fetch(ipAPI);
+    // const data = await response.json();
+    // const inputValue = data.ip;       
+    // salida += "IP: "+inputValue;
     if (carrito){      
-        miCarrito.itemsPedidos=[];      
+        miPedido.itemsPedidos=[];      
         carrito.forEach(element => {
             salida += `
             <p class="my-2 text-secondary">
-                <strong>${darNombreArticulo(itemsDisponibles,element.sitio)}</strong> (${element.cantidad} páginas) 
+                <strong>${darNombreArticulo(miPedido.itemsDisponibles,element.sitio)}</strong> (${element.cantidad} páginas) 
                 <span class="text-primary">
-                    Precio por página $ ${darPrecio(itemsDisponibles,element.sitio)} + IVA   
+                    Precio por página $ ${darPrecio(miPedido.itemsDisponibles,element.sitio)} + IVA   
                     <button type="button" class="btn btn-primary px-1 ms-4"  id="mas">+</button>
                     <button type="button" class="btn btn-primary px-1 ms-1"  id="menos">-</button>
                     <button type="button" class="btn btn-primary px-1 ms-1"  id="papelera">x</button>
                 </span>
-            </p>`;
-            agregarArticulo(miCarrito,element.sitio,element.cantidad);            
+            </p>`;             
+            miPedido.agregarArticulo(element.sitio,element.cantidad);             
         });
     }
     return salida;            
 }
 
 
-function renderCarrito(carrito){
-   
-    let sitiosPedidos = cargoCarrito(carrito,carrito.itemsDisponibles);
+function renderCarrito(pedido,indiceDto){
+    let miDescuento = pedido.descuentosDisponibles[indiceDto]||dto0;
+    let dto = new Descuento(miDescuento.id,miDescuento.valor);
     
-    let miCarrito = new Carrito(carrito.itemsDisponibles,carrito.descuentosDisponibles);
-    miCarrito.itemsPedidos=carrito.itemsPedidos;
+    let sitiosPedidos = cargoCarrito(pedido);
     
-    let sitiosCarrito = `
-        ${sitiosPedidos}
-    `;  
+    let miPedido = new Pedido(pedido.itemsDisponibles,pedido.descuentosDisponibles);
+    miPedido.itemsPedidos=pedido.itemsPedidos;
+    
+    let sitiosCarrito = `${sitiosPedidos}`;  
     document.getElementById("sitiosCarrito").innerHTML = sitiosCarrito;
     
-    let subtotalCarrito = `
-        ${miCarrito.subtotalCarrito(dto0)} 
-    `;  
+    let subtotalCarrito = `${miPedido.subtotalCarrito(dto)}`;  
     document.getElementById("subtotalCarrito").innerHTML = subtotalCarrito;
 
-    let porcentajeIVA = `
-        ${IVA*100} 
-    `; 
+    let descuento = `${dto.valor*100}`;  
+    document.getElementById("descuento").innerHTML = descuento;
+
+    let subtotalCarritoDto = `${miPedido.subtotalCarrito(dto)}`;  
+    document.getElementById("subtotalCarritoDto").innerHTML = subtotalCarritoDto;
+
+
+    let porcentajeIVA = `${IVA*100}`; 
     document.getElementById("porcentajeIVA").innerHTML = porcentajeIVA;
 
-    let iva = `
-        ${miCarrito.subtotalCarrito(dto0)*IVA}
-    `;
+    let iva = `${miPedido.subtotalCarrito(dto)*IVA}`;
     document.getElementById("iva").innerHTML = iva;
 
-    let subtotalIVA = `                                   
-        ${miCarrito.subtotalCarrito(dto0)*(1+IVA)}   
-    `;  
-    document.getElementById("subtotalIVA").innerHTML = subtotalIVA;   
-    
+    let subtotalIVA = `${miPedido.subtotalCarrito(dto)*(1+IVA)}`;  
+    document.getElementById("subtotalIVA").innerHTML = subtotalIVA;     
 }
 
-function descontar(){
-    let sitiosPedidos = cargoCarrito();
+function descontar(miPedido){
+    let sitiosPedidos = cargoCarrito(miPedido);
     let resumenCarrito = `
 
         <div class="row">
@@ -186,139 +183,79 @@ function descontar(){
                     Sitios solicitados:
                 </h2>
                 ${sitiosPedidos} 
-                <p>Subtotal Carrito $ ${miCarrito.subtotalCarrito(dto0)} + IVA  </p>   
-                <p>IVA ${IVA*100}% $ ${miCarrito.subtotalCarrito(dto0)*IVA}</p>  
-                <p>Subtotal IVA incluido $ ${miCarrito.subtotalCarrito(dto0)*(1+IVA)}</p>      
+                <p>Subtotal Carrito $ ${miPedido.subtotalCarrito(dto0)} + IVA  </p>   
+                <p>IVA ${IVA*100}% $ ${miPedido.subtotalCarrito(dto0)*IVA}</p>  
+                <p>Subtotal IVA incluido $ ${miPedido.subtotalCarrito(dto0)*(1+IVA)}</p>      
             </div> 
         </section>
-              
-
     `;  
     let mainPremium = document.getElementById("mainPremium");
     mainPremium.innerHTML = resumenCarrito;
 }
 
-////////////////////////////////////////////////////
-let cotizacionDolar = {};
-let bid = 0.0;
-let ask = 0.0;
-const cotizacion =  async () => { 
-    cotizacionDolar = await buscarCotizacionesAPI();  
-    bid = (cotizacionDolar?.dolar?.bid ?? -1);
-    ask = (cotizacionDolar?.dolar?.ask ?? -1);
-    alert("cotización del dolar\ncompra:  "+ bid+"\nventa: "+ask)
-}
-
-
-
 // Cargar Carrito desde local storage
-let crearCarrito  = async (itemsPorDefecto,descuentosDisponibles)=>{ 
+let crearCarrito  = async (itemsPorDefecto,descuentosPorDefecto)=>{ 
     let itemsDisponibles = await actualizarItemsDisponibles();    
     itemsDisponibles=itemsDisponibles||itemsPorDefecto;
+    let descuentosDisponibles = await actualizarDescuentosDisponibles();    
+    descuentosDisponibles=descuentosDisponibles||descuentosPorDefecto;
     
     // Carrito
-    const miCarrito = new Carrito(itemsDisponibles,descuentosDisponibles);    
-    renderCarrito(miCarrito);    
-    return miCarrito;    
+    const miPedido = new Pedido(itemsDisponibles,descuentosDisponibles);    
+    renderCarrito(miPedido,0);    
+    return miPedido;    
 }
 
 // Actualizar carrito 
 let actualizarCarrito  = async (itemsDisponibles,descuentosDisponibles)=>{ 
-    let miCarrito = await crearCarrito(itemsDisponibles,descuentosDisponibles);     
+    let miPedido = await crearCarrito(itemsDisponibles,descuentosDisponibles);     
     document.getElementById("aplicar").addEventListener("click", function() {           
-        sitioYCantidad(miCarrito);
-    });         
-}
-
-async function buscarCotizacionesAPI() {
-    let salida = {};
-    const url = "";//"https://uruguayapi.onrender.com/api/v1/banks/brou_rates";
-    salida = await fetch(url)
-    .then(respuesta => respuesta.json())
-    .then(datos => {
-        console.log("datos de uruguayapi: "+datos);
-        salida = datos;
-        return salida; 
-    })
-    .catch (()=>{ 
-        const buscoJson = async () => { salida = await buscarCotizacionesJsonAPI(); console.log("busco en json desde el catch: "+salida.dolar.bid);return salida};
-        return buscoJson();      
-    })  
-    console.log("busco en json: "+salida+" "+(salida?.dolar?.bid || -1));
-    return salida;      
-}
-
-const buscarCotizacionesJsonAPI = async () => {
-    let salida = {}; 
-    console.log("salida inicializada vacía: "+salida);      
-    const url = "./json/cotizaciones.json";       
-    salida = await fetch(url)
-    .then(respuesta => respuesta.json())   
-    .then(datos => {console.log("datos de json sacado de uruguayapi"+datos); alert("datos de json sacado de uruguayapi: "+datos);return datos})
-    .catch(() => {return {
-        "dolar": {
-            "bid": "40,20000",
-            "ask": "42,70000",
-            "spread_bid": "1,00000",
-            "spread_ask": "1,00000"
-        },
-        "dolar_ebrou": {
-            "bid": "40,60000",
-            "ask": "42,30000",
-            "spread_bid": "1,00000",
-            "spread_ask": "1,00000"
-        },
-        "euro": {
-            "bid": "42,37000",
-            "ask": "47,44000",
-            "spread_bid": "1,05410",
-            "spread_ask": "1,11090"
-        },
-        "peso_argentino": {
-            "bid": "0,02400",
-            "ask": "0,20000",
-            "spread_bid": "1.779,16670",
-            "spread_ask": "201,00000"
-        },
-        "real": {
-            "bid": "7,00000",
-            "ask": "8,70000",
-            "spread_bid": "6,10000",
-            "spread_ask": "4,62070"
-        },
-        "libra_esterlina": {
-            "bid": "50,89000",
-            "ask": "57,49000",
-            "spread_bid": "1,26600",
-            "spread_ask": "1,34630"
-        },
-        "franco_suizo": {
-            "bid": "45,57000",
-            "ask": "50,17000",
-            "spread_bid": "0,88220",
-            "spread_ask": "0,85120"
-        },
-        "guarani": {
-            "bid": "0,00495",
-            "ask": "0,00548",
-            "spread_bid": "8.127,92000",
-            "spread_ask": "7.796,32000"
-        },
-        "unidad_indexada": {
-            "bid": "-",
-            "ask": "6,12440",
-            "spread_bid": "-",
-            "spread_ask": "-"
-        },
-        "onza_troy_de_oro": {
-            "bid": "109.233,85200",
-            "ask": "117.209,79200",
-            "spread_bid": "2.717,26000",
-            "spread_ask": "2.744,96000"
+        sitioYCantidad(miPedido);
+    });
+    document.getElementById("vaciar").addEventListener("click", function() {        
+        miPedido.vaciarCarrito();
+        localStorage.setItem('carrito',JSON.stringify([]));
+        renderCarrito(miPedido,0);           
+        Swal.fire({
+            text: "Carrito vaciado",         
+            confirmButtonText: "Aceptar",
+            confirmButtonColor: "#114c5f",         
+            width: 400,        
+            color: "#0799b6",
+            background: "9cd2d3",        
+        });        
+    });        
+    document.getElementById("pagar").addEventListener("click", function() {  
+        // cliente paga      
+        miPedido.vaciarCarrito();
+        localStorage.setItem('carrito',JSON.stringify([]));
+        renderCarrito(miPedido,0);           
+        Swal.fire({
+            text: "Gracias por su compra",         
+            confirmButtonText: "Aceptar",
+            confirmButtonColor: "#114c5f",         
+            width: 400,        
+            color: "#0799b6",
+            background: "9cd2d3",        
+        });        
+    });            
+    document.getElementById("aplicarDescuento").addEventListener("click", async function() {              
+        const inputValue = "";
+        const { value: dto } = await Swal.fire({
+        title: "Ingrese su código de descuento",
+        input: "text",
+        inputLabel: "",
+        inputValue,
+        showCancelButton: true,
+        inputValidator: (value) => {
+            if (!value) {
+            return "Ingrese";
+            }
         }
-    }; 
-    }) 
-    console.log("a ver que hay ahora: "+salida.dolar.bid);
-    return salida;           
+        });
+        if (dto) {
+        Swal.fire(`Descuento ingresado ${dto}`);
+        }
+        renderCarrito(miPedido,0);        
+    });            
 }
-////////////////////////////////////////////////////////////////////

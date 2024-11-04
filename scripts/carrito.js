@@ -15,7 +15,7 @@ agregarItemsDisponibles(itemsDisponibles,ITEMS,PRECIOS);
 
 
 actualizarCarrito(itemsDisponibles,descuentosDisponibles);
-//cotizacion();
+
 
 
 

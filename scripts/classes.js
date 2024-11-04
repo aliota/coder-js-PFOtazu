@@ -16,7 +16,7 @@ class Descuento{
     }
 }
 
-class Carrito{
+class Pedido{
     constructor(itemsDisponibles,descuentosDisponibles){
         this.itemsPedidos = [];
         this.itemsDisponibles = itemsDisponibles;
