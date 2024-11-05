@@ -106,17 +106,12 @@ function sitioYCantidad(miPedido){
       });  
     compra = new Pedido(miPedido.itemsDisponibles,miPedido.descuentosDisponibles);
     carrito.forEach(elem =>{compra.agregarArticulo(elem.sitio,elem.cantidad)});    
-    renderCarrito(compra,0);  
+    renderCarrito(compra,dto0);  
 }
 
 function cargoCarrito(miPedido){
     let carrito = JSON.parse(localStorage.getItem('carrito')); 
-    let salida = "";
-    // const ipAPI = "//api.ipify.org?format=json";
-    // const response = await fetch(ipAPI);
-    // const data = await response.json();
-    // const inputValue = data.ip;       
-    // salida += "IP: "+inputValue;
+    let salida = "";    
     if (carrito){      
         miPedido.itemsPedidos=[];      
         carrito.forEach(element => {
@@ -124,22 +119,19 @@ function cargoCarrito(miPedido){
             <p class="my-2 text-secondary">
                 <strong>${darNombreArticulo(miPedido.itemsDisponibles,element.sitio)}</strong> (${element.cantidad} páginas) 
                 <span class="text-primary">
-                    Precio por página $ ${darPrecio(miPedido.itemsDisponibles,element.sitio)} + IVA   
-                    <button type="button" class="btn btn-primary px-1 ms-4"  id="mas">+</button>
-                    <button type="button" class="btn btn-primary px-1 ms-1"  id="menos">-</button>
-                    <button type="button" class="btn btn-primary px-1 ms-1"  id="papelera">x</button>
+                    Precio por página $ ${darPrecio(miPedido.itemsDisponibles,element.sitio)} + IVA                     
                 </span>
             </p>`;             
-            miPedido.agregarArticulo(element.sitio,element.cantidad);             
+            miPedido.agregarArticulo(element.sitio,element.cantidad);                    
         });
     }
     return salida;            
 }
 
 
-function renderCarrito(pedido,indiceDto){
-    let miDescuento = pedido.descuentosDisponibles[indiceDto]||dto0;
-    let dto = new Descuento(miDescuento.id,miDescuento.valor);
+function renderCarrito(pedido,miDescuento){
+    //let miDescuento = pedido.descuentosDisponibles[indiceDto]||dto0;    
+    let dto = new Descuento(miDescuento.id,miDescuento.valor)||dto0;;
     
     let sitiosPedidos = cargoCarrito(pedido);
     
@@ -149,7 +141,7 @@ function renderCarrito(pedido,indiceDto){
     let sitiosCarrito = `${sitiosPedidos}`;  
     document.getElementById("sitiosCarrito").innerHTML = sitiosCarrito;
     
-    let subtotalCarrito = `${miPedido.subtotalCarrito(dto)}`;  
+    let subtotalCarrito = `${miPedido.subtotalCarrito(dto0)}`;  
     document.getElementById("subtotalCarrito").innerHTML = subtotalCarrito;
 
     let descuento = `${dto.valor*100}`;  
@@ -169,30 +161,6 @@ function renderCarrito(pedido,indiceDto){
     document.getElementById("subtotalIVA").innerHTML = subtotalIVA;     
 }
 
-function descontar(miPedido){
-    let sitiosPedidos = cargoCarrito(miPedido);
-    let resumenCarrito = `
-
-        <div class="row">
-            <h1 class="col-12 text-center">Resumen del carrito</h1>            
-        </div>
-
-        <section class="row justify-content-center align-items-center bg-warning-subtle rounded my-3 px-2">
-            <div class="p-xl-3 p-1 col-12 m-2" id="mostrarCarrito">
-                <h2 class="text-primary ">
-                    Sitios solicitados:
-                </h2>
-                ${sitiosPedidos} 
-                <p>Subtotal Carrito $ ${miPedido.subtotalCarrito(dto0)} + IVA  </p>   
-                <p>IVA ${IVA*100}% $ ${miPedido.subtotalCarrito(dto0)*IVA}</p>  
-                <p>Subtotal IVA incluido $ ${miPedido.subtotalCarrito(dto0)*(1+IVA)}</p>      
-            </div> 
-        </section>
-    `;  
-    let mainPremium = document.getElementById("mainPremium");
-    mainPremium.innerHTML = resumenCarrito;
-}
-
 // Cargar Carrito desde local storage
 let crearCarrito  = async (itemsPorDefecto,descuentosPorDefecto)=>{ 
     let itemsDisponibles = await actualizarItemsDisponibles();    
@@ -202,22 +170,39 @@ let crearCarrito  = async (itemsPorDefecto,descuentosPorDefecto)=>{
     
     // Carrito
     const miPedido = new Pedido(itemsDisponibles,descuentosDisponibles);    
-    renderCarrito(miPedido,0);    
+    renderCarrito(miPedido,dto0);    
     return miPedido;    
+}
+
+//devuelve la IP 
+const miIP = async () => {         
+    const url = "//api.ipify.org?format=json";         
+    const IP = await fetch(url)
+    .then(respuesta => respuesta.json())   
+    .then(datos => {return datos.ip}) 
+    .catch(()=>{return ""});          
+    return IP;       
+}
+
+const mostrarIP = async() =>{
+    let ip = await miIP();   
+    document.getElementById("ip").innerHTML = ip;
 }
 
 // Actualizar carrito 
 let actualizarCarrito  = async (itemsDisponibles,descuentosDisponibles)=>{ 
-    let miPedido = await crearCarrito(itemsDisponibles,descuentosDisponibles);     
+    let miPedido = await crearCarrito(itemsDisponibles,descuentosDisponibles);  
+    
+      
     document.getElementById("aplicar").addEventListener("click", function() {           
         sitioYCantidad(miPedido);
     });
     document.getElementById("vaciar").addEventListener("click", function() {        
         miPedido.vaciarCarrito();
         localStorage.setItem('carrito',JSON.stringify([]));
-        renderCarrito(miPedido,0);           
+        renderCarrito(miPedido,dto0);           
         Swal.fire({
-            text: "Carrito vaciado",         
+            title: "Carrito vaciado",         
             confirmButtonText: "Aceptar",
             confirmButtonColor: "#114c5f",         
             width: 400,        
@@ -229,9 +214,9 @@ let actualizarCarrito  = async (itemsDisponibles,descuentosDisponibles)=>{
         // cliente paga      
         miPedido.vaciarCarrito();
         localStorage.setItem('carrito',JSON.stringify([]));
-        renderCarrito(miPedido,0);           
+        renderCarrito(miPedido,dto0);           
         Swal.fire({
-            text: "Gracias por su compra",         
+            title: "Gracias por su compra",         
             confirmButtonText: "Aceptar",
             confirmButtonColor: "#114c5f",         
             width: 400,        
@@ -239,23 +224,45 @@ let actualizarCarrito  = async (itemsDisponibles,descuentosDisponibles)=>{
             background: "9cd2d3",        
         });        
     });            
-    document.getElementById("aplicarDescuento").addEventListener("click", async function() {              
-        const inputValue = "";
+    document.getElementById("aplicarDescuento").addEventListener("click", async function() {     
+       
         const { value: dto } = await Swal.fire({
         title: "Ingrese su código de descuento",
-        input: "text",
-        inputLabel: "",
-        inputValue,
-        showCancelButton: true,
-        inputValidator: (value) => {
-            if (!value) {
-            return "Ingrese";
-            }
-        }
+        input: "text",           
+        confirmButtonText: "Aceptar",
+        confirmButtonColor: "#114c5f",          
+        color: "#0799b6",
+        background: "9cd2d3",
+        width: "300px",        
+        showCancelButton: false,        
         });
-        if (dto) {
-        Swal.fire(`Descuento ingresado ${dto}`);
+        let miDescuento = miPedido.descuentosDisponibles.find(elem=>elem.id===dto);
+        if (miDescuento!=undefined) {
+            
+            Swal.fire({
+                title: dto,  
+                text: `Descuento ingresado: ${miDescuento.valor*100}%`,    
+                showConfirmButton:true,  
+                confirmButtonText: "Aceptar",
+                confirmButtonColor: "#114c5f",                         
+                color: "#114c5f",
+                background: "9cd2d3",
+                width: "300px",                         
+                });
+        }else{
+            miDescuento = dto0;
+            Swal.fire({    
+
+                text: `Código de descuento incorrecto`,    
+                showConfirmButton:false,                      
+                timer:2000,         
+                color: "#114c5f",
+                background: "9cd2d3",
+                width: "300px",                         
+                });
+
         }
-        renderCarrito(miPedido,0);        
+        renderCarrito(miPedido,miDescuento);        
     });            
 }
+
