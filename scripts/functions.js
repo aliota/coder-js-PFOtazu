@@ -117,7 +117,7 @@ function cargoCarrito(miPedido){
         carrito.forEach(element => {
             salida += `
             <p class="my-2 text-secondary">
-                <strong>${darNombreArticulo(miPedido.itemsDisponibles,element.sitio)}</strong> (${element.cantidad} páginas) 
+                <strong>${darNombreArticulo(miPedido.itemsDisponibles,element.sitio)}</strong> (${element.cantidad} ${element.cantidad==1?"página":"páginas"}) 
                 <span class="text-primary">
                     Precio por página $ ${darPrecio(miPedido.itemsDisponibles,element.sitio)} + IVA                     
                 </span>
@@ -168,6 +168,14 @@ let crearCarrito  = async (itemsPorDefecto,descuentosPorDefecto)=>{
     let descuentosDisponibles = await actualizarDescuentosDisponibles();    
     descuentosDisponibles=descuentosDisponibles||descuentosPorDefecto;
     
+    //Cargo servicios
+    let sitios = "";
+    let index = 0;
+    itemsDisponibles.forEach(elem=>{
+        sitios += `<option value=${++index}>${elem.nombre}</option>`;        
+    })
+    document.getElementById("sitio").innerHTML=sitios;
+
     // Carrito
     const miPedido = new Pedido(itemsDisponibles,descuentosDisponibles);    
     renderCarrito(miPedido,dto0);    
@@ -227,7 +235,7 @@ let actualizarCarrito  = async (itemsDisponibles,descuentosDisponibles)=>{
     document.getElementById("aplicarDescuento").addEventListener("click", async function() {     
        
         const { value: dto } = await Swal.fire({
-        title: "Ingrese su código de descuento",
+        title: "Ingresa tu código de descuento",
         input: "text",           
         confirmButtonText: "Aceptar",
         confirmButtonColor: "#114c5f",          
@@ -259,10 +267,36 @@ let actualizarCarrito  = async (itemsDisponibles,descuentosDisponibles)=>{
                 color: "#114c5f",
                 background: "9cd2d3",
                 width: "300px",                         
-                });
+            });
 
         }
         renderCarrito(miPedido,miDescuento);        
     });            
 }
+
+//Datos de Contacto
+document.getElementById("enviarContacto").addEventListener("click",()=>{
+    let contenidoOK = document.getElementById("nombre").value && document.getElementById("email").value && document.getElementById("tel").value && document.getElementById("consulta").value;
+    if (contenidoOK){    
+        Swal.fire({    
+            text: `Gracias por enviarnos sus consultas`,    
+            showConfirmButton:true,  
+            confirmButtonText: "Aceptar",
+            confirmButtonColor: "#114c5f",                         
+            color: "#114c5f",
+            background: "9cd2d3",
+            width: "300px",                        
+        });
+    }else{
+        Swal.fire({    
+            text: `Completa todos los campos`,    
+            showConfirmButton:true,  
+            confirmButtonText: "Aceptar",
+            confirmButtonColor: "#114c5f",                         
+            color: "#114c5f",
+            background: "9cd2d3",
+            width: "300px",                        
+        }); 
+    }
+});
 

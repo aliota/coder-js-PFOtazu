@@ -12,6 +12,8 @@
     {"id":"7","nombre": "Portal", "precio": "3000.00"},
     {"id":"8","nombre": "Noticias/Revista", "precio": "1500.00"},
     {"id":"9","nombre": "Wiki/Foro", "precio": "300.00"},
-    {"id":"10","nombre": "Red Social", "precio": "25000.00"}
+    {"id":"10","nombre": "Red Social", "precio": "25000.00"},
+    {"id":"11","nombre": "En 5' (Free)", "precio": "0.00"},
+    {"id":"12","nombre": "Tips (Free)", "precio": "0.00"}
 ]
 
